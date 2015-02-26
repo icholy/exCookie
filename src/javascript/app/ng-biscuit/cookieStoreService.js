@@ -3,9 +3,6 @@
   var CookieStoreService = function ($document) {
 
     var baseElement = $document[0].find('base');
-    var lastCookies = {};
-    var lastCookieString = '';
-    var defaultCookiePath = baseHref();
 
     function baseHref() {
       var href = baseElement.attr('href');
@@ -19,6 +16,8 @@
         return str;
       }
     }
+
+    var defaultCookiePath = baseHref();
 
     function encodeAttributes(options) {
       var attr = "";
@@ -52,6 +51,9 @@
       }
       return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options):
     }
+
+    var lastCookies = {};
+    var lastCookieString = '';
 
     this.remove = function (name, options) {
       rawDocument.cookie = encodeCookie(name, undefined, options);
