@@ -57,6 +57,7 @@
     var MIN_EXPIRES_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
 
     this.remove = function (name, options) {
+      options = options || {};
       options.expires = MIN_EXPIRES_DATE;
       rawDocument.cookie = encodeCookie(name, undefined, options);
     };
