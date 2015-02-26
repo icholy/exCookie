@@ -1,10 +1,10 @@
-"use strict";
-
 (function () {
+  "use strict";
 
-  var CookieStoreService = function ($document) {
+  var CookieStoreService = function ($document, $log) {
 
-    var baseElement = $document[0].find('base');
+    var rawDocument = $document[0];
+    var baseElement = rawDocument.find('base');
 
     function baseHref() {
       var href = baseElement.attr('href');
@@ -39,7 +39,7 @@
         attr += ";max-age=" + options.maxAge;
       }
       if (options.secure === true) {
-        attr += ";secure"
+        attr += ";secure";
       }
       return attr;
     }
@@ -51,7 +51,7 @@
       } else {
         encodeValue = '';
       }
-      return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options):
+      return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options);
     }
 
     var MIN_EXPIRE_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
@@ -63,14 +63,14 @@
 
     this.put = function (name, value, options) {
       rawDocument.cookie = encodeCookie(name, value, options);
-      var cookies = rawDocument.cookies.length + 1;
 
       // per http://www.ietf.org/rfc/rfc2109.txt browser must allow at minimum:
       // - 300 cookies
       // - 20 cookies per unique domain
       // - 4096 bytes per cookie
+      var cookieLength = rawDocument.cookies.length + 1;
       if (cookieLength > 4096) {
-        console.log("Cookie '" + name +
+        $log.warn("Cookie '" + name +
           "' possibly not set or overflowed because it was too large (" +
           cookieLength + " > 4096 bytes)!");
       }
@@ -85,7 +85,7 @@
     var lastCookieString = '';
 
     this.getAll = function () {
-      var cookieArray, cookie, i, index;
+      var cookieArray, cookie, i, index, name;
 
       if (rawDocument.cookie !== lastCookieString) {
         lastCookieString = rawDocument.cookie;
@@ -112,7 +112,7 @@
 
   };
 
-  CookieStoreService.$inject = ['$document'];
+  CookieStoreService.$inject = ['$document', '$log'];
 
   angular.module('ngBiscuit').service('cookieStore', CookieStoreService);
 
