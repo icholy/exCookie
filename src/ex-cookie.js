@@ -142,6 +142,6 @@
 
   CookieStoreService.$inject = ['$document', '$log'];
 
-  angular.module('ngBiscuit').service('cookieStore', CookieStoreService);
+  angular.module('exCookie').service('cookieStore', CookieStoreService);
 
 }).call(null);
