@@ -54,10 +54,10 @@
       return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options);
     }
 
-    var MIN_EXPIRE_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
+    var MIN_EXPIRES_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
 
     this.remove = function (name, options) {
-      options.expires = MIN_EXPIRE_DATE;
+      options.expires = MIN_EXPIRES_DATE;
       rawDocument.cookie = encodeCookie(name, undefined, options);
     };
 
