@@ -56,12 +56,26 @@
 
     var MIN_EXPIRES_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
 
+    /**
+     * Remove a cookie by name
+     *
+     * @param {string} name
+     * @param {object} options
+     */
     this.remove = function (name, options) {
       options = options || {};
       options.expires = MIN_EXPIRES_DATE;
       rawDocument.cookie = encodeCookie(name, undefined, options);
     };
 
+    /**
+     * Put a cookie value
+     *
+     * @method put
+     * @param {string} name
+     * @param {any} value
+     * @param {object} options
+     */
     this.put = function (name, value, options) {
       rawDocument.cookie = encodeCookie(name, value, options);
 
@@ -77,6 +91,13 @@
       }
     };
 
+    /**
+     * Get a single cookie
+     *
+     * @method get
+     * @param {string} name
+     * @return {any} cookie value
+     */
     this.get = function (name) {
       var cookies = this.getAll();
       return cookies[name];
@@ -85,6 +106,12 @@
     var lastCookies = {};
     var lastCookieString = '';
 
+    /**
+     * Get all the cookies
+     *
+     * @method getAll
+     * @return {object} cookie object
+     */
     this.getAll = function () {
       var cookieArray, cookie, i, index, name;
 
