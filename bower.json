@@ -1,15 +1,13 @@
 {
-  "name": "ngWig",
-  "version": "0.2.1",
-  "devDependencies": {
-    "angular": "~1.2.16"
-  },
-  "homepage": "https://github.com/stevermeister/ng-biscuit",
+  "name": "exCookie",
+  "version": "0.1.0",
+  "homepage": "https://github.com/stevermeister/exCookie",
   "authors": [
-    "Stepan Suvorov <stevermeister@gmail.com>"
+    "Stepan Suvorov <stevermeister@gmail.com>",
+    "Ilia Choly <ilia.choly@gmail.com>"
   ],
-  "description": "AngularJS cookies extension",
-  "main": "dist/ng-biscuit.js",
+  "description": "AngularJS extended cookie store",
+  "main": "src/ex-cookie.js",
   "keywords": [
     "angular",
     "cookies",
