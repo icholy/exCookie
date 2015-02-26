@@ -59,6 +59,7 @@
     /**
      * Remove a cookie by name
      *
+     * @method remove
      * @param {string} name
      * @param {object} options
      */
