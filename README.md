@@ -6,7 +6,7 @@ ExCookie
 It's identical to `$cookieStore`, except it accepts an `options` object.
 
 ``` js
-angular.module('Foo').controller('bar', function (cookieStore) {
+angular.module('Foo', ['exCookie']).controller('bar', function (cookieStore) {
 
   var options = {
     path:    undefined,
