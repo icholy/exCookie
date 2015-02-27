@@ -53,13 +53,13 @@
     }
 
     function encodeCookie(name, value, options) {
-      var encodeValue;
+      var encodedValue;
       if (angular.isDefined(value)) {
-        encodeValue = encodeURIComponent(angular.toJson(value));
+        encodedValue = encodeURIComponent(angular.toJson(value));
       } else {
-        encodeValue = '';
+        encodedValue = '';
       }
-      return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options);
+      return encodeURIComponent(name) + '=' + encodedValue + encodeAttributes(options);
     }
 
     var lastCookies = {};
