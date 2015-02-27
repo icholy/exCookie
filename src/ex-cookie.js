@@ -4,7 +4,7 @@
   var CookieStoreService = function ($document, $log) {
 
     var rawDocument = $document[0];
-    var baseElement = rawDocument.find('base');
+    var baseElement = $document.find('base');
 
     function baseHref() {
       var href = baseElement.attr('href');
@@ -18,6 +18,14 @@
         return str;
       }
     }
+
+    function safeDecodeJson(src) {
+      try {
+        return angular.fromJson(src);
+      } catch (e) {
+        return src;
+      }
+    };
 
     var defaultCookiePath = baseHref();
 
@@ -54,6 +62,35 @@
       return encodeURIComponent(name) + '=' + encodeValue + encodeAttributes(options);
     }
 
+    var lastCookies = {};
+    var lastCookieString = '';
+
+    var parseCookies = function () {
+      var cookieArray, cookie, i, index, name;
+
+      if (rawDocument.cookie !== lastCookieString) {
+        lastCookieString = rawDocument.cookie;
+        cookieArray = lastCookieString.split("; ");
+        lastCookies = {};
+
+        for (i = 0; i < cookieArray.length; i++) {
+          cookie = cookieArray[i];
+          index = cookie.indexOf('=');
+          if (index > 0) { //ignore nameless cookies
+            name = safeDecodeURIComponent(cookie.substring(0, index));
+            // the first value that is seen for a cookie is the most
+            // specific one.  values for the same cookie name that
+            // follow are for less specific paths.
+            if (lastCookies[name] === undefined) {
+              lastCookies[name] = safeDecodeURIComponent(
+                  cookie.substring(index + 1));
+            }
+          }
+        }
+      }
+      return lastCookies;
+    };
+
     var MIN_EXPIRES_DATE = "Thu, 01 Jan 1970 00:00:00 GMT";
 
     /**
@@ -84,7 +121,7 @@
       // - 300 cookies
       // - 20 cookies per unique domain
       // - 4096 bytes per cookie
-      var cookieLength = rawDocument.cookies.length + 1;
+      var cookieLength = rawDocument.cookie.length + 1;
       if (cookieLength > 4096) {
         $log.warn("Cookie '" + name +
           "' possibly not set or overflowed because it was too large (" +
@@ -100,44 +137,10 @@
      * @return {any} cookie value
      */
     this.get = function (name) {
-      var cookies = this.getAll();
-      return cookies[name];
+      var cookies = parseCookies();
+      return safeDecodeJson(cookies[name]);
     };
 
-    var lastCookies = {};
-    var lastCookieString = '';
-
-    /**
-     * Get all the cookies
-     *
-     * @method getAll
-     * @return {object} cookie object
-     */
-    this.getAll = function () {
-      var cookieArray, cookie, i, index, name;
-
-      if (rawDocument.cookie !== lastCookieString) {
-        lastCookieString = rawDocument.cookie;
-        cookieArray = lastCookieString.split("; ");
-        lastCookies = {};
-
-        for (i = 0; i < cookieArray.length; i++) {
-          cookie = cookieArray[i];
-          index = cookie.indexOf('=');
-          if (index > 0) { //ignore nameless cookies
-            name = safeDecodeURIComponent(cookie.substring(0, index));
-            // the first value that is seen for a cookie is the most
-            // specific one.  values for the same cookie name that
-            // follow are for less specific paths.
-            if (lastCookies[name] === undefined) {
-              lastCookies[name] = angular.fromJson(
-                  safeDecodeURIComponent(cookie.substring(index + 1)));
-            }
-          }
-        }
-      }
-      return lastCookies;
-    };
 
   };
 
